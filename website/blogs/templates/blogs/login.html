@@ -1,0 +1,89 @@
+<head>
+    <title>Оригинальное название.ру - авторизация</title>
+
+    <style rel="stylesheet" type="text/css">
+        #registration-panel {
+            position: absolute; 
+            top: 50%;
+            left: 50%;  
+            transform: translate(-50%, -50%);
+            width: fit-content;
+            height: fit-content;
+            padding: 10px;
+            border-radius: 10px;
+            background-color: #4488bb;
+            text-align: center;
+        }
+
+        #registration-panel > h1 {
+            margin: 0 10px;
+            font-family: Arial;
+            font-size: 30px;
+            color: #FFFFFF;
+            text-align: center;
+            cursor: pointer;
+        }
+
+        #registration-panel > h2 {
+            margin: 5px 0 20px 0;
+            font-family: Arial;
+            font-size: 20px;
+            color: #FFFFFF;
+            text-align: center;
+        }
+
+        #registration-panel > p {
+            font-family: Arial;
+            font-size: 16px;
+            color: #FFFFFF;
+            text-align: center;
+            margin: 10px 0 5px 0;
+        }
+
+        .reg_input {
+            min-width: 200px;
+            width: 80%;
+        }
+
+        #registration-panel > input[type='submit'] {
+            min-width: 200px;
+            width: 80%;
+            padding: 0 5px;
+            margin: 20px 0 10px 0;
+            border: none;
+            border-radius: 5px;
+            font-size: 20px;
+            color: #FFFFFF;
+            background-color: #3377AA;
+            cursor: pointer;
+            transition: 0.25s;
+        }
+        #registration-panel > input[type='submit']:hover { background-color: #226699; }
+
+        #other_options > a {
+            margin: 0 10px;
+            font-size: 16px;
+            color: #FFFFFF;
+            text-decoration: underline;
+            cursor: pointer;
+        }
+    </style>
+</head>
+
+<body style="background-color: #EEF0FF;">
+    <form action="/log_submit" id = 'registration-panel' onsubmit="">
+        <h1 onclick="document.location.href = document.location.href.replace('login/', '')">Оригинальное название.ру</h1>
+        <h2>Войти</h2>
+        <p id = 'a123'>Имя на сайте:</p>
+        <input id='user_name' class="reg_input" name="name" type="text" maxlength="50" required>
+        <p>Пароль:</p>
+        <input id='user_password' class="reg_input" name="password" type="password" autocomplete="current-password" required>
+        <p style="color: #FFCC33;">{% if not auth_status %}Вы неправильно ввели логин или пароль!{% endif %}</p>
+        <input type="submit" method="GET" value="войти">
+        <div id = 'other_options'>
+            <a onclick="history.back()">вернуться</a>
+            <a onclick="document.location.href = document.location.href.replace('login/', 'registration/')">зарегистрироваться</a>
+            <a onclick="document.location.href = document.location.href.replace('login/', 'change_password/')">забыли пароль?</a>
+        </div>
+    </form>
+</body>

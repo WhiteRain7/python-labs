@@ -1,0 +1,83 @@
+<head>
+    <title>Оригинальное название.ру - регистрация</title>
+
+    <style rel="stylesheet" type="text/css">
+        #article-panel {
+            width: 80%;
+            margin: calc(10% - 5px);
+            height: fit-content;
+            padding: 10px;
+            border-radius: 10px;
+            color: #FFFFFF;
+            background-color: #4488bb;
+            text-align: center;
+        }
+
+        #article_info > label {
+            margin: 2px 10px;
+            display: inline-block;
+        }
+
+        p {
+            text-align: justify;
+            text-indent: 30px;
+            font-size: 18px;
+        }
+
+        button {
+            width: fit-content;
+            height: 20px;
+            border: none;
+            padding: 0 5px;
+            border-radius: 5px;
+            font-size: 16px;
+            background-color: #3377AA;
+            cursor: pointer;
+            display: inline-block;
+            transition: 0.25s;
+            color: #FFFFFF;
+            text-decoration: none;
+            cursor: pointer;
+        }
+        button:hover {background-color: #226699;}
+    </style>
+
+    <script type="text/javascript">
+        function redirect_to (rel_path) {
+            path = document.location.pathname
+            while (rel_path.startsWith('../')) {
+                rel_path.replace('../', '')
+                path = path.split('/').slice(0, -1).join('/')
+            }
+            document.location.href = document.location.href.replace(document.location.pathname, 
+                                                                    path + rel_path).replaceAll('//', '/')
+        }
+
+        function go_to (path) { document.location.href = path }
+        function switch_display (block_id) { document.getElementById(block_id).classList.toggle('hidden') }
+    </script>
+</head>
+
+<body style="background-color: #EEF0FF; text-align: center; align-items: center;">
+    <div id = 'article-panel'>
+        {% if article.img %}<img src="{{ article.img.url }}" style="width: 100%">{% endif %}
+        <h1>{{ article.heading }}</h1>
+        <hr>
+        <div id='article_info'>
+            <label>Блог: <span style="color: #FFFF77">{{ article.blog.name }}</span></label>
+            <label>Автор: <span style="color: #FFFF77">{{ article.blog.author }}</span></label>
+            <br>
+            <label>{{ article.pub_date }}</label>
+        </div>
+        <hr>
+        {% for par in article.splitted %}
+            <p>{{ par }}</p>
+        {% endfor %}
+        <hr>
+        <button onclick="go_to('/')">вернуться</button>
+        <button onclick="go_to('/blog/{{ article.blog }}')">перейти к блогу</button>
+        {% if USER and article.blog.author == USER.username %}
+            <button onclick="go_to('/edit_article/{{ article.id }}')">редактировать</button>
+        {% endif %}
+    </div>
+</body>

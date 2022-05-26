@@ -1,0 +1,7 @@
+d:
+cd D:\1. Документы\Университет\программирование JS\website
+py manage.py runserver
+
+При изменении models.py
+py manage.py makemigrations
+py manage.py migrate

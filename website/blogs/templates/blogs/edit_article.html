@@ -1,0 +1,117 @@
+<head>
+    <title>Оригинальное название.ру - редактирование статьи</title>
+
+    <style rel="stylesheet" type="text/css">
+        #article-panel {
+            position: absolute; 
+            top: 50%;
+            left: 50%;  
+            transform: translate(-50%, -50%);
+            max-width: 600px;
+            max-width: 1000px;
+            width: 80%;
+            height: fit-content;
+            padding: 10px;
+            border-radius: 10px;
+            background-color: #4488bb;
+            text-align: center;
+        }
+
+        #article-panel > h1 {
+            margin: 0 10px;
+            font-family: Arial;
+            font-size: 30px;
+            color: #FFFFFF;
+            text-align: center;
+            cursor: pointer;
+        }
+
+        #article-panel > h2 {
+            margin: 5px 0 20px 0;
+            font-family: Arial;
+            font-size: 20px;
+            color: #FFFFFF;
+            text-align: center;
+        }
+
+        #article-panel p {
+            font-family: Arial;
+            font-size: 16px;
+            color: #FFFFFF;
+            text-align: center;
+            margin: 10px 0 5px 0;
+        }
+
+        #article_heading {
+            min-width: 200px;
+            width: 80%;
+        }
+
+        #article_text {
+            min-width: 90%;
+            max-width: 90%;
+            min-height: 220px;
+        }
+
+        #article_file {
+            color: #FFFFFF;
+        }
+
+        #article_select {
+            background-color: #226699;
+        }
+
+        #article-panel > input[type='submit'] {
+            min-width: 200px;
+            width: 80%;
+            padding: 0 5px;
+            margin: 20px 0 10px 0;
+            border: none;
+            border-radius: 5px;
+            font-size: 20px;
+            color: #FFFFFF;
+            background-color: #3377AA;
+            cursor: pointer;
+            transition: 0.25s;
+        }
+        #article-panel > input[type='submit']:hover { background-color: #226699; }
+
+        #other_options > a {
+            margin: 0 10px;
+            font-size: 16px;
+            color: #FFFFFF;
+            text-decoration: underline;
+            cursor: pointer;
+        }
+    </style>
+</head>
+
+<body style="background-color: #EEF0FF;">
+    <form action="/article_submit/" enctype="multipart/form-data" id='article-panel' method="POST">
+        {% csrf_token %}
+        <h1 onclick="document.location.href = document.location.href.replace('registration/', '')">Оригинальное название.ру</h1>
+        <h2>Редактирование статьи</h2>
+        <p>Название статьи</p>
+        <input type="text" class="hidden" style="display: none" value="{{ id }}" name="id">
+        <input type="text" id='article_heading' value="{{ heading }}" name="heading" maxlength="200" placeholder="Не более 200 символов..." required>
+        <p>Содержание</p>
+        <textarea id='article_text' name="text" maxlength="2000" placeholder="Не более 2000 символов..." required>{{ text }}</textarea>
+        <div style="text-align: left; margin-left: 5%;">
+            <p style="display: inline-block">Изображение:</p>
+            <input type="file" id='article_file' value="{{ img }}" name="img" accept="image/png, image/gif, image/jpeg">
+            <br>
+            <p style="display: inline-block">Блог:</p>
+            <select name="blog" class="article_select">
+                {% for blog in blogs %}
+                    {% if blog.author == USER.username %}
+                        <option value="{{ blog.name }}" {% if sel_blog.name == blog.name %}selected{% endif %}>{{ blog.name }}</option>
+                    {% endif %}
+                {% endfor %}
+            </select>
+        </div>
+        <input type="submit" value="выложить">
+        <div id = 'other_options'>
+            <a onclick="history.back()">вернуться</a>
+        </div>
+    </form>
+</body>

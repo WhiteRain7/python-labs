@@ -1,0 +1,264 @@
+<head>
+    <meta charset="utf-8">
+    <title>Оригинальное название.ру - Новости</title>
+    <style rel="stylesheet" type="text/css">
+        #home-header {
+            position: absolute;
+            left: 0;
+            top: 0;
+            width: 100%; 
+            height: 40px; 
+            margin: 0; 
+            background-color: #4488bb;
+            font-family: Arial;
+            vertical-align: middle;
+        }
+
+        #site_name {
+            position: absolute;
+            top: 10px;
+            left: 10px;
+            width: fit-content;
+            font-size: 20px;
+            margin: 0; 
+            color: #FFFFFF; 
+            cursor: pointer;
+        }
+
+        #auth_block {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            width: max-content;
+            height: 20px;
+        }
+
+        #auth_block > div {
+            width: fit-content;
+            height: 20px;
+            border: none;
+            padding: 0 5px;
+            border-radius: 5px;
+            font-size: 16px;
+            background-color: #3377AA;
+            cursor: pointer;
+            display: inline-block;
+            transition: 0.25s;
+        }
+        #auth_block > div:hover {background-color: #226699;}
+
+        a {
+            color: #FFFFFF;
+            text-decoration: none;
+            cursor: pointer;
+        }
+
+        #home-main {
+            position: absolute;
+            left: 50%;
+            top: 40px;
+            transform: translate(-50%, 0);
+        }
+
+        #left_panel {
+            position: absolute;
+            left: 10px;
+            top: 10px;
+            width: fit-content;
+            height: fit-content;
+        }
+
+        #author_panel {
+            width: 190px;
+            height: fit-content;
+            padding: 5px 0 10px 0;
+            background-color: #EEF0FF;
+            border-radius: 10px;
+            margin-bottom: 10px;
+        }
+
+        #blogs {
+            width: 190px;
+            min-height: 300px;
+            padding: 5px 0 10px 0;
+            background-color: #EEF0FF;
+            border-radius: 10px;
+        }
+
+        .blog {
+            width: 100%;
+            height: 20px;
+            font-size: 16px;
+            text-align: center;
+            background-color: #EEF0FF;
+            transition: 0.25s;
+            cursor: pointer;
+        }
+        .blog:hover { background-color: #BBCCDD; }
+        .blog[selected] { background-color: #4488bb; color: #FFFFFF; }
+
+        #articles {
+            position: absolute;
+            left: 210px;
+            top: 10px;
+            min-width: 300px;
+            max-width: 914px;
+            width: calc(100% - 210px);
+            min-height: 300px;
+            padding: 5px 0 10px 0;
+            background-color: #EEF0FF;
+            border-radius: 10px;
+            display: inline-block;
+            text-align: justify;
+        }
+
+        .article {
+            width: 300px;
+            max-height: 200px;
+            overflow: hidden;
+            text-align: center;
+            background-color: #EEF0FF;
+            transition: 0.25s;
+            cursor: pointer;
+            display: inline-block;
+        }
+        .article:hover { background-color: #BBCCDD; }
+
+        .article > h1 {
+            margin: 10px 0;
+            max-height: 60px;
+            overflow: hidden;
+            font-size: 16px;
+            text-align: center;
+        }
+
+        .img_block {
+            max-width: 300px;
+            width: 100%;
+            height: 100px;
+            overflow: hidden;
+        }
+
+        .date_block {
+            height: 20px;
+            vertical-align: middle;
+            color: #888888;
+            font-size: 14px;
+        }
+
+        .txt_block {
+            max-width: 300px;
+            width: 100%;
+            height: 100px;
+            overflow: hidden;
+            background: linear-gradient(180deg, rgb(0,0,0) 0%, rgba(0,0,0,0) 90%); 
+            background-clip: text;
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .txt_block > p { margin: 0 }
+
+        #blog_name {width: 100%}
+
+        .hidden {display: none;}
+
+        @media (min-width: 610px) {
+            #home-main { width: calc(300px + 210px); }
+            #articles { width: 300px; }
+        }
+        @media (min-width: 920px) {
+            #home-main { width: calc(607px + 210px); }
+            #articles { width: 607px; }
+        }
+        @media (min-width: 1230px) {
+            #home-main { width: calc(914px + 210px); }
+            #articles { width: 914px; }
+        }
+    </style>
+
+    <script type="text/javascript">
+        function redirect_to (rel_path) {
+            path = document.location.pathname
+            while (rel_path.startsWith('../')) {
+                rel_path.replace('../', '')
+                path = path.split('/').slice(0, -1).join('/')
+            }
+            document.location.href = document.location.href.replace(document.location.pathname, 
+                                                                    path + rel_path).replaceAll('//', '/')
+        }
+
+        function go_to (path) { document.location.href = path }
+        function switch_display (block_id) { document.getElementById(block_id).classList.toggle('hidden') }
+
+        function create_blog () {
+            let blog_name = document.getElementById('blog_name')
+            if (blog_name.value != '') { go_to('/create_blog?name=' + blog_name.value) }
+        }
+    </script>
+</head>
+
+<body>
+    <header id = 'home-header'>
+        <h1 id = 'site_name' onclick="go_to('/')">Оригинальное название.ру</h1>  
+        <div id = 'auth_block'>
+            {% if USER.is_authenticated %}
+                <div><a>Здравствуйте, <span style="color: #FFFF77">{{ USER.username }}</span></a></div>
+                <div><a href = '/logout'>выйти</a></div>
+            {% else %}
+                <div><a href = '/login'>войти</a></div>
+                <div><a href = '/registration'>зарегистрироваться</a></div>
+            {% endif %}
+        </div>
+    </header>
+
+    <div id = 'home-main'>
+        <div id = 'left_panel'>
+            {% if USER.is_authenticated %}
+                <div id = 'author_panel'>
+                    <div style = 'text-align: center;'>мои блоги</div>
+                    {% for blog in user_blogs %}
+                        <div class = 'blog' {% if selected == blog %} selected {% endif %} onclick="go_to('/blog/{{ blog.name }}')">{{ blog.name }}</div> 
+                    {% endfor %}
+                    <hr>
+                    <div class = 'blog' onclick="switch_display('blog_name'); switch_display('blog_create')">создать блог</div>
+                    <input id='blog_name' type="text" maxlength="50" class="hidden" placeholder="не более 50 символов">
+                    <div id='blog_create' class = 'blog hidden' onclick="create_blog()">создать</div>
+                    {% if can_add_article %}
+                        <div class = 'blog' onclick="go_to('/new_article')">написать статью</div>
+                    {% endif %}
+                </div>
+            {% endif %}
+            
+            <div id = 'blogs'>
+                <div style = 'text-align: center;'>блоги</div>
+                <div class = 'blog' {% if selected == None %} selected {% endif %} onclick="go_to('/all_blogs')">показать все</div>
+                {% for blog in blogs %} 
+                    <div class = 'blog' {% if selected == blog %} selected {% endif %} onclick="go_to('/blog/{{ blog.name }}')">{{ blog.name }}</div> 
+                {% endfor %}
+            </div>
+        </div>
+
+        <div id = 'articles'>
+            <div style = 'text-align: center;'>Статьи</div>
+            {% for article in articles %}
+                {% if article.blog == selected or selected == None %}
+                    <div class = 'article' onclick="go_to('/article/{{article.id}}')">
+                        {% if article.img %}
+                            <div class="img_block">
+                                <img src="{{ article.img.url }}" width="100%">
+                            </div>
+                            <h1>{{ article.heading }}</h1>
+                        {% else %}
+                            <h1>{{ article.heading }}</h1>
+                            <div class="txt_block">
+                                <p>{{ article.text }}</p>
+                            </div>
+                        {% endif %}
+                        <div class="date_block">— {{ article.pub_date }} —</div>
+                    </div> 
+                {% endif %}
+            {% endfor %}
+        </div>
+    </div>
+</body>

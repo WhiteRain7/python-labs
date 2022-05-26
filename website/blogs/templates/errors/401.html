@@ -1,0 +1,12 @@
+{% extends "error.html" %}
+
+{% block title_1 %}401{% endblock %}
+{% block title_2 %}ошибка 401{% endblock %}
+
+{% block text %}
+    {% if text %}
+        {{ text }}
+    {% else %}
+        Вы должны авторизоваться для совершения данного действия.
+    {% endif %}
+{% endblock %}
